@@ -5,8 +5,8 @@ import Product from '../Product/Product';
 const Products = () => {
   const [products] = useState(productsData);
 
-  const [currentColor, setCurrentColor] = useState(products.colors[0]);
-  const [currentSize, setCurrentSize] = useState(products.sizes[0].name);
+  const [currentColor, setCurrentColor] = useState('black'); //products.colors[0]
+  const [currentSize, setCurrentSize] = useState('S'); //products.sizes[0].name
 
   return (
     <section>

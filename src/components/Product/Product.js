@@ -15,7 +15,6 @@ const Product = (props) => {
     const additionalPrice = props.sizes.map((item) =>
       props.sizes.find(additionalPrice)
     );
-    console.log(additionalPrice);
 
     return props.basePrice + additionalPrice;
   };
@@ -38,10 +37,10 @@ const Product = (props) => {
             <h3 className={styles.optionLabel}>Sizes</h3>
             <ul className={styles.choices}>
               {props.sizes.map((item) => (
-                <li key={item}>
+                <li key={props.sizes.name}>
                   <button
                     type="button"
-                    className={item === props.size && styles.active}
+                    className={item === props.size ? styles.active : undefined}
                     onClick={(e) => props.setCurrentSize(item)}
                   >
                     {props.sizes.name}
@@ -54,7 +53,7 @@ const Product = (props) => {
             <h3 className={styles.optionLabel}>Colors</h3>
             <ul className={styles.choices}>
               {props.colors.map((item) => (
-                <li key={item}>
+                <li key={props.color}>
                   <button
                     type="button"
                     className={clsx(
