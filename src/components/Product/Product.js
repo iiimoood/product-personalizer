@@ -2,8 +2,12 @@ import styles from './Product.module.scss';
 import clsx from 'clsx';
 import Button from '../Button/Button';
 import PropTypes from 'prop-types';
+import { useState } from 'react';
 
 const Product = (props) => {
+  const [currentColor, setCurrentColor] = useState(props.colors[0]);
+  const [currentSize, setCurrentSize] = useState(props.sizes[0].name);
+
   const prepareColorClassName = (color) => {
     return styles[
       'color' + color[0].toUpperCase() + color.substr(1).toLowerCase()
@@ -12,9 +16,9 @@ const Product = (props) => {
 
   // eslint-disable-next-line no-unused-vars
   const getPrice = () => {
-    const additionalPrice = props.sizes.map((item) =>
-      props.sizes.find(additionalPrice)
-    );
+    const additionalPrice = props.sizes.find((item) => {
+      return item.name === currentSize;
+    }).additionalPrice;
 
     return props.basePrice + additionalPrice;
   };
@@ -24,26 +28,46 @@ const Product = (props) => {
         <img
           className={styles.image}
           alt={props.title}
-          src={`${process.env.PUBLIC_URL}/images/products/shirt-${props.name}--${props.currentColor}.jpg`}
+          src={`${process.env.PUBLIC_URL}/images/products/shirt-${props.name}--${currentColor}.jpg`}
         />
       </div>
       <div>
         <header>
           <h2 className={styles.name}>{props.title}</h2>
-          <span className={styles.price}>Price: {props.basePrice}$</span>
+          <span className={styles.price}>Price: {getPrice()}$</span>
         </header>
-        <form>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            console.log(
+              'SUMMARY: ' +
+                'Name: ' +
+                props.name +
+                ' ' +
+                'Price: ' +
+                getPrice() +
+                ' ' +
+                'Size: ' +
+                currentSize +
+                ' ' +
+                'Color: ' +
+                currentColor
+            );
+          }}
+        >
           <div className={styles.sizes}>
             <h3 className={styles.optionLabel}>Sizes</h3>
             <ul className={styles.choices}>
               {props.sizes.map((item) => (
-                <li key={props.sizes.name}>
+                <li key={item.name}>
                   <button
                     type="button"
-                    className={item === props.size ? styles.active : undefined}
-                    onClick={(e) => props.setCurrentSize(item)}
+                    className={
+                      item.name === currentSize ? styles.active : undefined
+                    }
+                    onClick={(e) => setCurrentSize(item.name)}
                   >
-                    {props.sizes.name}
+                    {item.name}
                   </button>
                 </li>
               ))}
@@ -53,37 +77,20 @@ const Product = (props) => {
             <h3 className={styles.optionLabel}>Colors</h3>
             <ul className={styles.choices}>
               {props.colors.map((item) => (
-                <li key={props.color}>
+                <li key={item}>
                   <button
                     type="button"
                     className={clsx(
                       prepareColorClassName(item),
-                      item === props.color && styles.active
+                      item === currentColor && styles.active
                     )}
-                    onClick={(e) => props.setCurrentColor(item)}
+                    onClick={(e) => setCurrentColor(item)}
                   />
                 </li>
               ))}
             </ul>
           </div>
-          <Button
-            className={styles.button}
-            onClick={(e) => {
-              e.preventDefault();
-              console.log(
-                'Summary' +
-                  '====' +
-                  'Name: ' +
-                  props.name +
-                  'Price: ' +
-                  props.price +
-                  'Size: ' +
-                  props.size +
-                  'Color: ' +
-                  props.color
-              );
-            }}
-          >
+          <Button className={styles.button}>
             <span className="fa fa-shopping-cart" />
           </Button>
         </form>
