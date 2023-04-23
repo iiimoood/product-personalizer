@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { useState } from 'react';
 import ProductImage from './ProductImage/ProductImage';
 import ProductForm from './ProductForm/ProductForm';
+import { useMemo } from 'react';
 
 const Product = (props) => {
   const [currentColor, setCurrentColor] = useState(props.colors[0]);
@@ -14,14 +15,15 @@ const Product = (props) => {
     ];
   };
 
-  // eslint-disable-next-line no-unused-vars
-  const getPrice = () => {
+  const getPrice = useMemo(() => {
     const additionalPrice = props.sizes.find((item) => {
       return item.name === currentSize;
     }).additionalPrice;
 
     return props.basePrice + additionalPrice;
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentSize]);
+
   return (
     <article className={styles.product}>
       <div className={styles.imageContainer}>
@@ -34,7 +36,7 @@ const Product = (props) => {
       <div>
         <header>
           <h2 className={styles.name}>{props.title}</h2>
-          <span className={styles.price}>Price: {getPrice()}$</span>
+          <span className={styles.price}>Price: {getPrice}$</span>
         </header>
         <ProductForm
           currentColor={currentColor}

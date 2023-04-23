@@ -1,4 +1,3 @@
-//import Button from '../../Button/Button';
 import styles from '../Product.module.scss';
 import PropTypes from 'prop-types';
 import OptionColor from './OptionColor/OptionColor';
